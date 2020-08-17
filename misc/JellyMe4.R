@@ -9,17 +9,18 @@
 #' transformed into the [JellyMe4 package in
 #' Julia](https://github.com/palday/JellyMe4.jl).
 
-library("JuliaCall")
-library("lme4")
+if (FALSE) {
+    library("JuliaCall")
+    library("lme4")
 
-julia_setup()  # this can take a while
+    julia_setup()  # this can take a while
+    
+    julia_install_package_if_needed("MixedModels")
+    julia_install_package_if_needed("JellyMe4")
 
-julia_install_package_if_needed("MixedModels")
-julia_install_package_if_needed("JellyMe4")
-
-julia_library("MixedModels")
-julia_library("RCall")
-julia_library("JellyMe4")
+    julia_library("MixedModels")
+    julia_library("RCall")
+    julia_library("JellyMe4")
 
 #' if we want to use JuliaCall directly, then this what we would do (but if
 #' you're skilled enough to write this code out yourself, I would recommend just
@@ -55,12 +56,14 @@ class(jm1)
 
 summary(fm1)
 summary(jm1)
+}
 
-#' NB: you can also start the Julia console from within R with julia_console(),
-#' but none of the special REPL modes (RCall, Pkg, Shell) will work
+# NB: you can also start the Julia console from within R with julia_console(),
+# but none of the special REPL modes (RCall, Pkg, Shell) will work
 
-#' note that this will *not* preserve contrast coding at the time of writing
-jmer <- function(formula, data, REML=TRUE){
+## note that this will *not* preserve contrast coding at the time of writing
+## don't deal with/export this until we know what to do with it
+jmer2 <- function(formula, data, REML=TRUE){
     # to simplify maintainence here (in the hopes of turning this into a real
     # package), I'm depending on JellyMe4, which copies the dataframe back with
     # the model this is of course what you want if you're primarily working in
@@ -81,7 +84,7 @@ jmer <- function(formula, data, REML=TRUE){
 }
 
 #' example based on https://stats.stackexchange.com/questions/465699/analyzing-a-partially-crossed-design/465864#465864
-
+if (FALSE) {
 dat <- read.csv("https://raw.githubusercontent.com/ilzl/i/master/d.csv")
 dat$item_type <- factor(dat$item_type)
 dat$gender <- factor(dat$gender)
@@ -96,3 +99,4 @@ summary(jm2)
 
 fm2@optinfo
 jm2@optinfo
+}
